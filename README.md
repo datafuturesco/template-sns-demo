@@ -104,3 +104,10 @@ This DAG publishes to the SNS topic provided in the variable of `sns_test_arn` u
 
 This is the DAG to enable cross-dag dependency, once the DAG tasks in the sns-publish-dag.py are successfully executed and the message is published to SNS topic,
 SQS queues subscribed to the topic receive message. We use SQSSensor operator which waits for any such message to be received, once it reads the message from the queue url it retrieves from `sqs_queue_test` variable, it triggers the downward dependent tasks.
+
+Below are some useful links on how to use sns and sqs client to set various attributes :
+
+- SNS client : https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/sns.html
+- SQS client : https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/sqs.html
+- SNSPublish documentation : https://airflow.apache.org/docs/apache-airflow-providers-amazon/stable/_api/airflow/providers/amazon/aws/operators/sns/index.html
+- SQSSensor documentation : https://airflow.apache.org/docs/apache-airflow-providers-amazon/stable/_api/airflow/providers/amazon/aws/sensors/sqs/index.html
