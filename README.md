@@ -80,3 +80,27 @@ aws sns publish --topic-arn arn:aws:sns:your-region:your-account-id:your-topic-n
 ```
 aws sqs receive-message --queue-url https://sqs.your-region.amazonaws.com/your-account-id/your-queue-name
 ```
+
+## Cross-DAG Dependecies handling
+
+We leveraged SNSPublish and SQSSensor operators of Airflow to achieve the cross-dag dependency.
+
+#### create_sns_topic.py
+
+This sample DAG creates SNS topic using boto3 client. Make sure to provide unique topic name.
+The DAG also stores the topic arn as airflow variable which is used while subscribing to the topic created.
+
+#### create_sqs_queue.py
+
+This sample DAG creates SQS queue and also subscribes to the SNS topic.
+It retrieves the SNS topic arn from the airflow variables provided in the airflow variable `sns_test_arn` to subscribe to it.
+The created SQS queue url upon successful creation is also stored as airflow varibale `sqs_queue_test_url`, make sure to provide unique name to your queue.
+
+#### sns-publish-dag.py
+
+This DAG publishes to the SNS topic provided in the variable of `sns_test_arn` using SNSPublish operator upon successful upward dependent task runs.
+
+#### sqs-sensor-dag.py
+
+This is the DAG to enable cross-dag dependency, once the DAG tasks in the sns-publish-dag.py are successfully executed and the message is published to SNS topic,
+SQS queues subscribed to the topic receive message. We use SQSSensor operator which waits for any such message to be received, once it reads the message from the queue url it retrieves from `sqs_queue_test` variable, it triggers the downward dependent tasks.
