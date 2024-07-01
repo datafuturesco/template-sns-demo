@@ -12,6 +12,48 @@ This repo gives sample DAGs to create SNS topic and SQS queue on AWS, subscribe 
 This module assumes that you already have an AWS account setup, the IAM user and role have necessary permissions for SNS and SQS added to them.
 You should have a running MWAA environment to execute the DAGs.
 
+The simple policy that can be added to IAM role to create and use the SNS ans SQS resources is given below.
+
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowSNSActions",
+            "Effect": "Allow",
+            "Action": [
+                "sns:CreateTopic",
+                "sns:DeleteTopic",
+                "sns:ListTopics",
+                "sns:ListSubscriptionsByTopic",
+                "sns:GetSubscriptionAttributes",
+                "sns:Subscribe",
+                "sns:SetSubscriptionAttributes",
+                "sns:ConfirmSubscription",
+                "sns:Publish"
+            ],
+            "Resource": "arn:aws:sns:*:{AccountID}:*"
+        },
+        {
+            "Sid": "AllowSQSActions",
+            "Effect": "Allow",
+            "Action": [
+                "sqs:CreateQueue",
+                "sqs:DeleteQueue",
+                "sqs:GetQueueUrl",
+                "sqs:GetQueueAttributes",
+                "sqs:SetQueueAttributes",
+                "sqs:ListQueues",
+                "sqs:ReceiveMessage",
+                "sqs:DeleteMessage"
+            ],
+            "Resource": "arn:aws:sqs:*:{AccountID}:*"
+        }
+    ]
+}
+
+```
+
 ## Debugging
 
 For checking if the SNS topic and SQS queues are created properly and the subscription is successful, you can run below commands on AWS CLI.
