@@ -32,7 +32,7 @@ The simple policy that can be added to IAM role to create and use the SNS ans SQ
                 "sns:ConfirmSubscription",
                 "sns:Publish"
             ],
-            "Resource": "arn:aws:sns:*:{AccountID}:{Arn}"
+            "Resource": "arn:aws:sns:*:{AccountID}:*"
         },
         {
             "Sid": "AllowSQSActions",
@@ -47,7 +47,7 @@ The simple policy that can be added to IAM role to create and use the SNS ans SQ
                 "sqs:ReceiveMessage",
                 "sqs:DeleteMessage"
             ],
-            "Resource": "arn:aws:sqs:*:{AccountID}:{Arn}"
+            "Resource": "arn:aws:sqs:*:{AccountID}:*"
         }
     ]
 }
